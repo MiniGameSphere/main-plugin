@@ -1,0 +1,6 @@
+name: mgs-main-plugin
+version: '${version}'
+main: uk.fuby.mgs.Main
+api-version: '1.20'
+authors: [Skye]
+description: The main plugin for the MiniGame Sphere server
