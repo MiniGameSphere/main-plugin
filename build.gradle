@@ -36,12 +36,6 @@ java {
     }
 }
 
-tasks.withType(JavaCompile).configureEach {
-    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
-        options.release = targetJavaVersion
-    }
-}
-
 processResources {
     def props = [version: version]
     inputs.properties props
@@ -50,6 +44,7 @@ processResources {
         expand props
     }
 }
+
 
 tasks.register('preRunServer'){
     dependsOn tasks.build
@@ -66,8 +61,11 @@ tasks.register('preRunServer'){
 
         def serverJar = new File(runDir + "/server.jar")
         if (!serverJar.exists()) {
-            def url = new URL('https://download.getbukkit.org/spigot/spigot-1.20.1.jar')
-            url.withInputStream{ i -> serverJar.withOutputStream{ it << i }}
+            def buildTools = runDir + '/buildtools/'
+            def SpigotFolder = new File(buildTools + '/SpigotJar/')
+            if (!SpigotFolder.exists() || SpigotFolder.listFiles().length == 0) {
+                ((JavaExec) tasks.named('buildSpigot').get()).exec()
+            }
         }
 
         def setupFolder = new File("../server-setup")
@@ -82,7 +80,8 @@ tasks.register('preRunServer'){
             for (final def file in pluginsFolder.listFiles()) {
                 def name = file.name
                 if (name.substring(name.length() - 4) == ".jar") {
-                    def destinationJar = new File("$runDir/plugins/", file.name)
+                    def versionlessName = name.split("-")[0] + ".jar"
+                    def destinationJar = new File("$runDir/plugins/", versionlessName)
                     destinationJar.createNewFile()
                     Files.copy(file.toPath(), destinationJar.toPath(), StandardCopyOption.REPLACE_EXISTING)
                 }
@@ -113,6 +112,31 @@ tasks.register('preRunServer'){
             Files.copy(eula.toPath(), serverEula.toPath(), StandardCopyOption.REPLACE_EXISTING)
         }
 
+    }
+}
+
+tasks.register('buildSpigot', JavaExec) {
+    def runDir = "${projectDir.path}/run"
+
+    def buildTools = new File(runDir + '/buildtools')
+    def buildToolsJar = new File(buildTools.toPath().toString() + '/BuildTools.jar')
+    if (!buildToolsJar.exists()) {
+        Files.createDirectories(buildTools.toPath())
+        buildToolsJar.createNewFile()
+    }
+    def url = new URL('https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar')
+    url.withInputStream{ i -> buildToolsJar.withOutputStream{ it << i }}
+
+    classpath(buildToolsJar)
+    workingDir(buildTools)
+    args = ["--rev", spigot_mc_version, "--compile", "SPIGOT", "-oSpigotJar"]
+
+    doLast{
+        def serverJar = new File(runDir + "/server.jar")
+        def SpigotFolder = new File(buildTools.toPath().toString() + "/SpigotJar/")
+        def files = SpigotFolder.listFiles()
+        File builtSpigotJar = files[0]
+        Files.move(builtSpigotJar.toPath(), serverJar.toPath(), StandardCopyOption.REPLACE_EXISTING)
     }
 }
 

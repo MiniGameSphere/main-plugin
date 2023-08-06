@@ -4,3 +4,4 @@ main: com.mgs.mainPlugin.Main
 api-version: '1.20'
 authors: [Skye]
 description: The main plugin for the MiniGame Sphere server
+depend: [KVM]

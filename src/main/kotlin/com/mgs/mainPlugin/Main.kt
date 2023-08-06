@@ -1,15 +1,20 @@
 package com.mgs.mainPlugin;
 
+import com.mgs.mainPlugin.games.PlayerLists
+import com.mgs.mainPlugin.games.events.listeners.EventListener
 import org.bukkit.plugin.java.JavaPlugin;
 
 class Main : JavaPlugin() {
 
     override fun onEnable() {
-        // Plugin startup logic
+        val server = this.server
+        val pluginManager = server.pluginManager
 
+        EventListener.register(this)
     }
 
-    override fun  onDisable() {
-        // Plugin shutdown logic
+    override fun onDisable() {
+        PlayerLists.playerMap.clear()
     }
+
 }
