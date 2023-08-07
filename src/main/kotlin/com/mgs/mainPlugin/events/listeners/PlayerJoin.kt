@@ -1,4 +1,4 @@
-package com.mgs.mainPlugin.games.events.listeners
+package com.mgs.mainPlugin.events.listeners
 
 import com.mgs.mainPlugin.games.players.GamePlayer
 import org.bukkit.event.player.PlayerJoinEvent

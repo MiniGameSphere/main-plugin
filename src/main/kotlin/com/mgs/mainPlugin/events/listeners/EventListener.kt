@@ -1,7 +1,6 @@
-package com.mgs.mainPlugin.games.events.listeners
+package com.mgs.mainPlugin.events.listeners
 
-import com.mgs.mainPlugin.games.events.GameEndEvent
-import com.mgs.mainPlugin.games.players.GamePlayer
+import com.mgs.mainPlugin.events.GameEndEvent
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
