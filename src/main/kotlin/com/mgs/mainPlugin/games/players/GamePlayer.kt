@@ -16,6 +16,7 @@ data class GamePlayer(
 
     fun remove() {
         PlayerLists.playerMap.remove(player)
+        team?.players?.remove(this)
     }
 
     companion object {

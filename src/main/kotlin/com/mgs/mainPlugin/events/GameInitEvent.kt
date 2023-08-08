@@ -1,10 +1,10 @@
 package com.mgs.mainPlugin.events
 
+import com.mgs.mainPlugin.games.MiniGame
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 
-class GameEndEvent(override val gameName: String) : GameEndEventBase() {
-
+class GameInitEvent(val minigame: MiniGame) : Event() {
     override fun getHandlers(): HandlerList {
         return HANDLERS
     }
