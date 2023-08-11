@@ -4,7 +4,6 @@ import com.mgs.mainPlugin.events.GameEndEvent
 import com.mgs.mainPlugin.events.GameInitEvent
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.player.PlayerEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.plugin.java.JavaPlugin
