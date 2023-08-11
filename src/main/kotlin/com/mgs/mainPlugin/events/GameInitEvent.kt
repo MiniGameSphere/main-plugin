@@ -12,6 +12,7 @@ class GameInitEvent(val minigame: MiniGame) : Event() {
     companion object {
         private val HANDLERS : HandlerList = HandlerList()
 
+        @Suppress("unused")
         @JvmStatic
         fun getHandlerList() : HandlerList {
             return HANDLERS

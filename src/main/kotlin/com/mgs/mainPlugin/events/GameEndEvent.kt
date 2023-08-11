@@ -11,7 +11,7 @@ class GameEndEvent(override val gameName: String) : GameEndEventBase() {
     companion object {
         private val HANDLERS : HandlerList = HandlerList()
 
-        @Suppress("unused", "unused")
+        @Suppress("unused")
         @JvmStatic
         fun getHandlerList() : HandlerList {
             return HANDLERS
