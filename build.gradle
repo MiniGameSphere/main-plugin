@@ -32,7 +32,7 @@ java {
     sourceCompatibility = javaVersion
     targetCompatibility = javaVersion
     if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+        toolchain.languageVersion.set(JavaLanguageVersion.of(targetJavaVersion))
     }
 }
 
@@ -73,7 +73,7 @@ tasks.register('preRunServer'){
         }
 
         def setupFolder = new File("../server-setup")
-        if (!setupFolder.exists()) return;
+        if (!setupFolder.exists()) return
 
         def pluginsFolder = new File(setupFolder, "plugins")
         def serverProperties = new File(setupFolder, "server.properties")
@@ -84,8 +84,8 @@ tasks.register('preRunServer'){
             for (final def file in pluginsFolder.listFiles()) {
                 def name = file.name
                 if (name.substring(name.length() - 4) == ".jar") {
-                    def versionlessName = name.split("-")[0] + ".jar"
-                    def destinationJar = new File("$runDir/plugins/", versionlessName)
+                    def versionStrippedName = name.split("-")[0] + ".jar"
+                    def destinationJar = new File("$runDir/plugins/", versionStrippedName)
                     destinationJar.createNewFile()
                     Files.copy(file.toPath(), destinationJar.toPath(), StandardCopyOption.REPLACE_EXISTING)
                 }
