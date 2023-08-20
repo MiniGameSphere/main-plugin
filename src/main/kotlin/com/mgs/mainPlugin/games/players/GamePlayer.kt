@@ -6,25 +6,30 @@ import org.bukkit.entity.Player
 
 data class GamePlayer(
     val player: Player,
-    var team: Team? = null,
-    var party: Party? = null,
+    var team: Team = Team(),
     var miniGame: MiniGame? = null
 ) {
-    fun add() {
-        PlayerLists.playerMap[player] = this
-    }
+    val party: Party
+        get() {
+            return team.party
+        }
 
     fun remove() {
+        team.removePlayer(this)
         PlayerLists.playerMap.remove(player)
-        team?.players?.remove(this)
+    }
+
+    init {
+        PlayerLists.playerMap[player] = this
+        team.addPlayer(this)
     }
 
     companion object {
         val Player.gamePlayer : GamePlayer
             get() {
-            val gamePlayer = PlayerLists.playerMap[this] ?: GamePlayer(player = this)
-            PlayerLists.playerMap[this] = gamePlayer
-            return gamePlayer
-        }
+                val gamePlayer = PlayerLists.playerMap[this] ?: GamePlayer(player = this)
+                PlayerLists.playerMap[this] = gamePlayer
+                return gamePlayer
+            }
     }
 }

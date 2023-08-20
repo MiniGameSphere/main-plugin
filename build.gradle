@@ -19,10 +19,16 @@ repositories {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
+    maven {
+        name = "worldedit"
+        url = "https://maven.enginehub.org/repo"
+    }
 }
 
 dependencies {
     compileOnly "org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT"
+    compileOnly "com.sk89q.worldedit:worldedit-core:7.3.0-SNAPSHOT"
+    compileOnly "com.sk89q.worldedit:worldedit-bukkit:7.3.0-SNAPSHOT"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
 
@@ -73,7 +79,7 @@ tasks.register('preRunServer'){
         }
 
         def setupFolder = new File("../server-setup")
-        if (!setupFolder.exists()) return
+        if (!setupFolder.exists()) return;
 
         def pluginsFolder = new File(setupFolder, "plugins")
         def serverProperties = new File(setupFolder, "server.properties")
@@ -84,8 +90,8 @@ tasks.register('preRunServer'){
             for (final def file in pluginsFolder.listFiles()) {
                 def name = file.name
                 if (name.substring(name.length() - 4) == ".jar") {
-                    def versionStrippedName = name.split("-")[0] + ".jar"
-                    def destinationJar = new File("$runDir/plugins/", versionStrippedName)
+                    def versionlessName = name.split("-")[0] + ".jar"
+                    def destinationJar = new File("$runDir/plugins/", versionlessName)
                     destinationJar.createNewFile()
                     Files.copy(file.toPath(), destinationJar.toPath(), StandardCopyOption.REPLACE_EXISTING)
                 }

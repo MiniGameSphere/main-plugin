@@ -3,8 +3,32 @@ package com.mgs.mainPlugin.games.players
 import com.mgs.mainPlugin.games.PlayerLists
 
 data class Party(
-    val teams: MutableList<Team> = ArrayList()
+    private val teamList: MutableList<Team> = ArrayList(),
+    var leadingTeam: Team? = null
 ) {
+    val teams: List<Team>
+        get() {
+            return teamList.toList()
+        }
+
+    val partyLeader: GamePlayer?
+        get() {
+            return leadingTeam?.teamLeader
+        }
+
+    fun addTeam(team: Team) {
+        leadingTeam ?: { leadingTeam = team }
+        teamList.add(team)
+    }
+    fun removeTeam(team: Team) {
+        teamList.remove(team)
+        if (teamList.size == 0) {
+            PlayerLists.partyList.remove(this)
+        } else if (leadingTeam == team) {
+            leadingTeam = teamList[0]
+        }
+    }
+
     val playerCount : Int
         get() {
             var total = 0
@@ -12,9 +36,6 @@ data class Party(
             return total
         }
 
-    fun remove() {
-        PlayerLists.partyList.remove(this)
-    }
     init {
         PlayerLists.partyList.add(this)
     }
