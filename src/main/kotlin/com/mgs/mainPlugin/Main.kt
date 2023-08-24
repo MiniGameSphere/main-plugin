@@ -11,7 +11,6 @@ class Main : JavaPlugin() {
         val pluginManager = server.pluginManager
 
         EventListener.register(this)
-
     }
 
     override fun onDisable() {
